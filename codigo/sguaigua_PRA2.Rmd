@@ -1,5 +1,5 @@
 ---
-title: "PRACTICA 2: LIMPIEZA Y VALIDACIÓN DE LOS DATOS"
+title: 'PRACTICA 2: LIMPIEZA Y VALIDACIÓN DE LOS DATOS'
 author: "Sinthia Elizabeth Guaigua Guanopatin"
 date: '2022-06-03'
 output:
@@ -7,6 +7,9 @@ output:
     toc: yes
     number_sections: yes
     toc_depth: 2
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
 ---
 
 ```{r setup, include=FALSE}
@@ -526,7 +529,7 @@ En base a estas variables se pudo predecir el valor de una construcción.
 Los modelos son faciles de implementar con los algoritmos que presta los paquetes, sin embargo si se debe tener mucho cuidado con las variables del set de datos que se va ha manejar, y esto depende de un buen analisis de la información y comparativa entre variables, adicionalmente del tratamiento previo que se debe dar a los mismos. 
 
 ### ¿Los resultados permiten responder al problema?
-Si se pudo predecir el valor de una variable, en base a las variables que mas influyen en el calculo. 
+Si, se pudo predecir el valor de una vivienda en base a las variables que mas influyen en el calculo del precio a vender. 
 
 ## Código: Hay que adjuntar el código, preferiblemente en R, 
 ```{r}

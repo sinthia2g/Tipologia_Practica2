@@ -156,7 +156,7 @@ data_set$Precio_M2_total<- (data_set$PRICE/data_set$LAND_AREA)
 
 Al crear las nuevas variables, se procede a eliminar las variables: LAND_AREA,FLOOR_AREA,PRICE, debido a que se estaría redundando la información. 
 ```{r}
-data_set[c("LAND_AREA","FLOOR_AREA","BATHROOMS","BEDROOMS","GARAGE")] <- NULL
+data_set[c("LAND_AREA","BATHROOMS","BEDROOMS","GARAGE")] <- NULL
 ```
 
 Se identifica que las variables NEAREST_STN_DIST,NEAREST_SCH_DIST,CBD_DIST no estan en la misma escala, por lo que se procede a cambiar las variables NEAREST_STN_DIST,CBD_DIST dividiendo para 1000
@@ -407,7 +407,7 @@ for (i in 1:ncol(data_set)) {
 ```
 Normalizamos utilizando la  función "rescale" que realiza un escalado de la variables en un rango [0,1] es decir, por la diferencia:
 ```{r}
-data_set_norm <- data_set[c( "CBD_DIST","NEAREST_STN_DIST","NEAREST_SCH_DIST","PRICE","BUILD_YEAR")]
+data_set_norm <- data_set[c( "CBD_DIST","NEAREST_STN_DIST","NEAREST_SCH_DIST","PRICE","BUILD_YEAR","FLOOR_AREA")]
 
 data_set_norm <- sapply(data_set_norm, rescale)
 head(data_set_norm)
@@ -423,6 +423,7 @@ fligner.test(PRICE ~ NEAREST_STN_DIST, data = data_set_norm)
 fligner.test(PRICE ~ NEAREST_SCH_DIST, data = data_set_norm)
 fligner.test(PRICE ~ CBD_DIST, data = data_set_norm)
 fligner.test(PRICE ~ BUILD_YEAR, data = data_set_norm)
+fligner.test(PRICE ~ FLOOR_AREA, data = data_set_norm)
 ```
 
 Solo para la variable NEAREST_SCH_DIST, obtenemos un p-valor superior a 0,05, aceptamos la hipótesis de que las varianzas de ambas muestras son homogéneas.
@@ -442,6 +443,7 @@ cor.test(data_set$PRICE,data_set$CBD_DIST, method="spearman")
 cor.test(data_set$PRICE,data_set$NEAREST_SCH_DIST, method="spearman")
 cor.test(data_set$Precio_M2_total,data_set$NEAREST_SCH_DIST, method="spearman")
 cor.test(data_set$PRICE,data_set$BUILD_YEAR, method="spearman")
+cor.test(data_set$PRICE,data_set$FLOOR_AREA, method="spearman")
 ```
 
 Se mantiene la relación entre el precio y la cercania a una escuela NEAREST_SCH_DIST y CBD_DIST.
@@ -460,7 +462,7 @@ plot_dot_plot_precio(na.omit(data_set),"SEG_Precio")
 
 __Regresión Lineal__
 
-Revisión de relación entre variables se reconfirma que las variables "CBD_DIST","NEAREST_STN_DIST","NEAREST_SCH_DIST" son las que mas se relacionan con el precio.
+Revisión de relación entre variables se reconfirma que las variables "CBD_DIST","NEAREST_STN_DIST","NEAREST_SCH_DIST", "FLOOR_AREA" son las que mas se relacionan con el precio.
 
 Se calculará un modelo de regresión lineal utilizando regresores cuantitativos para poder realizar las predicciones de los precios.
 
@@ -469,6 +471,7 @@ Regresores cuantitativos con mayor coeficiente  de correlación con respecto al 
 distancia_centro=data_set$CBD_DIST
 distancia_estacion_bus=data_set$NEAREST_STN_DIST
 distancia_escuela=data_set$NEAREST_SCH_DIST
+area_construida=data_set$FLOOR_AREA
 ```
 Variable a predecir "PRECIO" por metro cuadrado
 ```{r}
@@ -478,10 +481,10 @@ precio=data_set$Precio_M2_total
 modelo1 = lm(precio~distancia_escuela,data=data_set)
 modelo2 = lm(precio~distancia_escuela+distancia_centro,data=data_set)
 modelo3 = lm(precio~distancia_escuela+distancia_estacion_bus,data=data_set)
-modelo4 = lm(precio~distancia_escuela+distancia_estacion_bus+distancia_centro,data=data_set)
+modelo4 = lm(precio~distancia_escuela+distancia_estacion_bus+distancia_centro+area_construida,data=data_set)
 modelo5 = lm(precio~distancia_estacion_bus+distancia_centro,data=data_set)
 modelo6 = lm(precio~distancia_centro,data=data_set)
-modelo7 = lm(precio~distancia_estacion_bus,data=data_set)
+modelo7 = lm(precio~area_construida,data=data_set)
 
 # Tabla con los coeficientes de determinación de cada modelo
 tabla.coeficientes <- matrix(c(1, summary(modelo1)$r.squared,
@@ -504,7 +507,8 @@ Ahora, empleando este modelo, podemos proceder a realizar predicciones de precio
 newdata <- data.frame(
 distancia_centro = 17.50,
 distancia_estacion_bus = 3.2,
-distancia_escuela = 1.35
+distancia_escuela = 1.35,
+area_construida=500
 )
 # Predecir el precio
 predict(modelo4, newdata)

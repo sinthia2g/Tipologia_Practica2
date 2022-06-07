@@ -571,8 +571,7 @@ data_set$PRICE=as.numeric(data_set$PRICE)</code></pre>
 </ul>
 <pre class="r"><code>data_set$Precio_M2_total&lt;- (data_set$PRICE/data_set$LAND_AREA)</code></pre>
 <p>Al crear las nuevas variables, se procede a eliminar las variables:
-LAND_AREA,FLOOR_AREA,PRICE, debido a que se estaría redundando la
-información.</p>
+LAND_AREA,PRICE, debido a que se estaría redundando la información.</p>
 <pre class="r"><code>data_set[c(&quot;LAND_AREA&quot;,&quot;BATHROOMS&quot;,&quot;BEDROOMS&quot;,&quot;GARAGE&quot;)] &lt;- NULL</code></pre>
 <p>Se identifica que las variables
 NEAREST_STN_DIST,NEAREST_SCH_DIST,CBD_DIST no estan en la misma escala,

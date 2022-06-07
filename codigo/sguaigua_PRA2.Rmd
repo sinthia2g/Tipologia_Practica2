@@ -154,7 +154,7 @@ Se considerá crear las siguientes variables:
 data_set$Precio_M2_total<- (data_set$PRICE/data_set$LAND_AREA)
 ```
 
-Al crear las nuevas variables, se procede a eliminar las variables: LAND_AREA,FLOOR_AREA,PRICE, debido a que se estaría redundando la información. 
+Al crear las nuevas variables, se procede a eliminar las variables: LAND_AREA,PRICE, debido a que se estaría redundando la información. 
 ```{r}
 data_set[c("LAND_AREA","BATHROOMS","BEDROOMS","GARAGE")] <- NULL
 ```
